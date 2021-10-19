@@ -8,22 +8,21 @@ interface IPayload {
 export function ensureAuthenticated(request: Request, response: Response, next: NextFunction) {
     const authToken = request.headers.authorization;
 
-    if(!authToken) {
+     if(!authToken) {
         return response.status(401).json({
             errorCode: "token.invalid"
         });
+     }
+     const [, token] = authToken.split(" ");
 
-         const [, token] = authToken.split(" ");
+     try {
+        const {sub} = verify(token, process.env.SECRET_KEY) as IPayload;
 
-         try {
-            const {sub} = verify(token, process.env.SECRET_KEY) as IPayload;
+        request.user_id = sub;
 
-            request.user_id = sub
-
-             return next();
-         } catch (err) {
-             return response.status(401).json({errorCode: "token.expired"})
-         }
-    }
-
+         return next();
+     } catch (err) {
+         return response.status(401).json({errorCode: "token.expired"})
+     }
 }
+

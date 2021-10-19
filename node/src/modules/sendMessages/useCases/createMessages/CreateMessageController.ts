@@ -12,9 +12,9 @@ class CreateMessageController {
         const { user_id } = request;
 
         try {
-        const result = await this.createMessageUseCase.execute(text, user_id);
+            const result = await this.createMessageUseCase.execute(text, user_id);
 
-        return response.json(result);
+            return response.json(result);
         } catch (err) {
             return response.json(err.message);
         }

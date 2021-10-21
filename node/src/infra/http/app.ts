@@ -17,10 +17,6 @@ const io = new Server(serverHttp, {
     }
 });
 
-io.on("connection", socket => {
-    console.log(socket.id);
-})
-
 app.use(express.json());
 
 app.use(routes);
